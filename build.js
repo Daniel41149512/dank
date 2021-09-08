@@ -1,17 +1,9 @@
 const { execSync } = require('child_process');
 
-function buildWasm(pkg) {
-    const underscoredName = pkg.replace(/-/g, '_');
+function buildWasm(pkg, buildCommand) {
+    buildCommand.push(pkg);
 
-    const buildCommand = [
-        'cargo',
-        'build',
-        '--target',
-        'wasm32-unknown-unknown',
-        '--release',
-        '--package',
-        pkg,
-    ];
+    const underscoredName = pkg.replace(/-/g, '_');
 
     console.log(`Building ${underscoredName}.wasm`);
     execSync(buildCommand.join(' '));
@@ -27,6 +19,34 @@ function buildWasm(pkg) {
     execSync(optCommand.join(' '));
 }
 
-buildWasm('xtc-history-bucket');
-buildWasm('xtc-history-e2e');
-buildWasm('xtc');
+let buildType = (process.env.BUILD_TYPE || "Release").toUpperCase();
+console.log(`Building in ** ${buildType} ** mode`);
+
+let buildCommand = "";
+switch (buildType)
+{
+    case "DEBUG":
+        buildCommand =
+        [
+            'cargo',
+            'build',
+            '--target',
+            'wasm32-unknown-unknown',
+            '--debug',
+            '--package',
+        ]
+    default:
+        buildCommand =
+        [
+            'cargo',
+            'build',
+            '--target',
+            'wasm32-unknown-unknown',
+            '--release',
+            '--package',
+        ]
+}
+
+buildWasm('xtc-history-bucket', [...buildCommand]);
+buildWasm('xtc-history-e2e', [...buildCommand]);
+buildWasm('xtc', [...buildCommand]);
