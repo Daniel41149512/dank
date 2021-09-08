@@ -3,3 +3,4 @@ Cargo.lock
 .dfx
 .vscode/tasks.json
 .vscode/launch.json
+.vscode/bookmarks.json
