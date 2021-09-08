@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "type": "shell",
+        "label": "altz",
+        "command": "cargo",
+        "args": ["build", "--target", "wasm32-unknown-unknown", "--package", "xtc"],
+        "presentation": {
+            "clear": true
+        },
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "detail": "compile Rust"
+      }
+    ]
+ }
